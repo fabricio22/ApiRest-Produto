@@ -1,9 +1,14 @@
 package br.com.school.api.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,14 +49,25 @@ public class ProdutoResource {
 	@PostMapping
 	@ResponseBody
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Produto create(@RequestBody Produto produto) {
-		return produtoService.create(produto);
+	public ResponseEntity<?> create(@Valid @RequestBody Produto produto, Errors error) {
+		if (!error.hasErrors()) {
+			Produto produtoCriado = produtoService.create(produto);
+			return new ResponseEntity<Produto>(produtoCriado, HttpStatus.CREATED);
+		}
+
+		return ResponseEntity.badRequest().body(error.getAllErrors().stream()
+				.map(mensagem -> mensagem.getDefaultMessage()).collect(Collectors.joining(",")));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseBody
-	public Produto update(@PathVariable("id") Long id, @RequestBody Produto produto) {
-		return produtoService.update(id, produto);
+	public ResponseEntity<?> update(@Valid @PathVariable("id") Long id, @RequestBody Produto produto, Errors error) {
+		if (!error.hasErrors()) {
+			Produto produtoAtualizado = produtoService.update(id, produto);
+			return new ResponseEntity<Produto>(produtoAtualizado, HttpStatus.OK);
+		}
+		return ResponseEntity.badRequest().body(error.getAllErrors().stream()
+				.map(mensagem -> mensagem.getDefaultMessage()).collect(Collectors.joining(",")));
 	}
 
 	@DeleteMapping("/{id}")

@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
@@ -13,7 +17,10 @@ public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty(message = "Chave nome não pode ser nulo.")
+	@NotBlank(message = "valor nome não pode estar em branco.")
 	private String nome;
+	@Min(value = 0, message = "quantidade tem que ser maior ou igual a zero.")
 	private Integer quantidade;
 	private Date dataCriacao;
 
