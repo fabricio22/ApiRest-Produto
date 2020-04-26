@@ -36,14 +36,16 @@ public class ProdutoResource {
 
 	@GetMapping
 	@ResponseBody
-	public List<Produto> findAll() {
-		return this.produtoService.findAll();
+	public ResponseEntity<?> findAll() {
+		List<Produto> listaProduto = this.produtoService.findAll();
+		return new ResponseEntity<List>(listaProduto, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	@ResponseBody
-	public Produto findById(@PathVariable("id") Long id) {
-		return produtoService.find(id);
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Produto produto = produtoService.find(id);
+		return new ResponseEntity<Produto>(produto, HttpStatus.OK);
 	}
 
 	@PostMapping

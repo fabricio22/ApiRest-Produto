@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -31,6 +32,13 @@ public class Produto {
 	public Produto(String nome, Integer quantidade) {
 		this.nome = nome;
 		this.quantidade = quantidade;
+	}
+
+	@PrePersist
+	public void validaAntes() {
+		if (this.dataCriacao == null) {
+			this.dataCriacao = new Date();
+		}
 	}
 
 	public Long getId() {
