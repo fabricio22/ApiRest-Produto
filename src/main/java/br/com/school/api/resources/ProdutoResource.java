@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.school.api.models.Produto;
 import br.com.school.api.services.ProdutoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api(value = "API REST - Modulo Produto")
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoResource {
@@ -34,6 +37,7 @@ public class ProdutoResource {
 		this.produtoService = produtoService;
 	}
 
+	@ApiOperation(value = "Retorna uma lista de Produtos")
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> findAll() {
@@ -41,6 +45,7 @@ public class ProdutoResource {
 		return new ResponseEntity<List>(listaProduto, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorno um único produdo pelo Id")
 	@GetMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
@@ -48,6 +53,7 @@ public class ProdutoResource {
 		return new ResponseEntity<Produto>(produto, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Cria um produto")
 	@PostMapping
 	@ResponseBody
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -61,6 +67,7 @@ public class ProdutoResource {
 				.map(mensagem -> mensagem.getDefaultMessage()).collect(Collectors.joining(",")));
 	}
 
+	@ApiOperation("Atualiza um produto")
 	@PutMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<?> update(@Valid @PathVariable("id") Long id, @RequestBody Produto produto, Errors error) {
@@ -72,6 +79,7 @@ public class ProdutoResource {
 				.map(mensagem -> mensagem.getDefaultMessage()).collect(Collectors.joining(",")));
 	}
 
+	@ApiOperation(value = "Remove um produto pelo Id")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") Long id) {
